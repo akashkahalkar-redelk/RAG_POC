@@ -62,4 +62,9 @@ qa = RetrievalQA.from_chain_type(
 # ---- Step 2: Answer query ----
 def get_answer(question: str) -> dict:
     res = qa({"query": question})
+    print("\n--- Retrieved Context ---")
+    for doc in res.get("source_documents", []):
+        print(f"Source: {doc.metadata.get('source', 'unknown')}")
+        print(f"Content: {doc.page_content[:500]}...")
+    print("--- End of Context ---\n")
     return res
