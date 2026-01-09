@@ -1,6 +1,8 @@
 from langchain.chains import RetrievalQA
 from langchain_ollama import OllamaLLM
 from langchain.prompts import PromptTemplate
+from dotenv import load_dotenv
+load_dotenv()
 
 from chunking.splitter import chunk_documents
 from ingestion.loader import load_codebase
@@ -35,22 +37,24 @@ else:
     # print([doc.page_content for doc in docs])
     is_ready = True
 
-prompt_template = """You are an expert coding assistant. Your task is to answer the user's QUESTION based ONLY on the provided CONTEXT.
+prompt_template = """You are a Repository Intelligence Bot. Your mission is to provide deep, analytical insights into the provided codebase CONTEXT. You are an expert on this project's architecture, implementation details, and component relationships.
 
 Follow these strict formatting rules:
 1.  **JSON Output Only**: Return your answer in a raw JSON object. Do not wrap it in markdown code blocks.
 2.  **Structure**: The JSON object must have the following keys:
-    - `"answer"`: A string containing the explanation or answer.
-    - `"code_snippets"`: A list of objects, each with `"language"` and `"code"` keys.
+    - `"answer"`: A string containing the explanation or answer. Use rich Markdown (headers, lists, bolding, inline code) inside this string to provide a professional, structured report.
+    - `"code_snippets"`: A list of objects, each with `"language"` and `"code"` keys for specific examples.
 3.  **Code Formatting**: 
-    - Ensure all code in `"code"` values is properly escaped for JSON (e.g., newlines as `\n`, quotes indented).
-    - Do not use markdown format in the `"answer"` string.
-4.  **Conciseness**: Be direct.
+    - Ensure all code in `"code"` values is properly escaped for JSON (e.g., newlines as `\n`, quotes escaped).
+4.  **Insight & Depth**: 
+    - Do not just define terms; explain their specific role and implementation within this codebase.
+    - If asked about "structure" or "architectural" details, provide a comprehensive breakdown of methods, data flow, and responsibilities.
+    - Be authoritative but precise, sticking ONLY to what is visible in the CONTEXT.
 
 Instructions:
-1.  Analyze the CONTEXT snippets.
-2.  Synthesize an answer exclusively from the CONTEXT.
-3.  If the answer is not in the CONTEXT, return a JSON with `"answer": "I cannot find the answer in the provided context."`
+1.  Analyze the provided CONTEXT thoroughly.
+2.  Synthesize a detailed response that maps the user's QUESTION to the specific implementations found in the CONTEXT.
+3.  If the answer is not in the CONTEXT, return a JSON with `"answer": "The provided codebase context does not contain enough information to answer this question accurately."`
 
 CONTEXT:
 ---
