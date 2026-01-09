@@ -29,7 +29,7 @@ Follow the instructions on the [Ollama website](https://ollama.com/) to download
 After installation, you need to pull the required models. Open your terminal and run:
 
 ```bash
-ollama pull codellama:13b
+ollama pull qwen2.5-coder:7b
 ollama pull mxbai-embed-large
 ```
 
